@@ -59,6 +59,7 @@ def backward_substitution(U, y):
         for col in range(len(U)-1,row,-1):
             x[row] -= x[col] * U[row][col]
         x[row] /= U[row][row]
+    print(x)
     return x
 
 def substitution(L, U, b):
@@ -72,7 +73,7 @@ def substitution(L, U, b):
 
     # Ux = y, solve x
     x = backward_substitution(U, y)
-
+    
     return x
 
 def plot(model_name, x, y, b):
@@ -151,9 +152,9 @@ if __name__ == '__main__':
     x = data[:,0]
     b = data[:,1].reshape((len(data[:,1]), 1))
     A = matrix_A(data[:,0], N)
-    print(A)
     gram_matrix = np.matmul(A.T, A)
     A_transpose_b = np.matmul(A.T, b)
+    print(A_transpose_b)
 
     ''' 
     LSE
@@ -161,7 +162,9 @@ if __name__ == '__main__':
     ''' 
     lambda_I = LAMBDA * np.identity(np.shape(gram_matrix)[0])
     gram_matrix_add_lambda_I = np.add(gram_matrix, lambda_I)
+    print(gram_matrix_add_lambda_I)
     L, U = LU_decomposition(gram_matrix_add_lambda_I)
+    print(L,U)
     lse_result = substitution(L, U, A_transpose_b)
 
     show_result(A, lse_result, b, x, 'LSE')
