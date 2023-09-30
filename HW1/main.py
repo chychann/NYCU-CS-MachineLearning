@@ -118,6 +118,9 @@ def gradient_descent(X, y, coeffs, learning_rate, epochs, Lambda, N):
 
 
 def inverse_matrix(M):
+    '''
+    Inverse Matrix: performs the Gauss-Jordan elimination to compute the inverse of the input matrix
+    '''
     n = len(M)
     # Create an augmented matrix [M | I], where I is the identity matrix
     augmented_matrix = [[0.0] * (2 * n) for _ in range(n)]
@@ -178,7 +181,6 @@ if __name__ == '__main__':
         for idx, row in enumerate(file_rows):
             point.append([float(row[0]), float(row[1])])
     data = np.array(point)
-    # print(data)
 
     '''
     Gram_matrix
@@ -206,24 +208,21 @@ if __name__ == '__main__':
     L, U = LUdecompose(gram_matrix_add_lambda_I)
     inverse_L = inverse_matrix(L)
     inverse_U = inverse_matrix(U)
-    inverse_ATA_lambdaI = np.matmul(inverse_U, inverse_L, dtype=np.float64)#inverse_U.dot(inverse_L)
-    result_lse = np.matmul(inverse_ATA_lambdaI, AT_b, dtype=np.float64) #inverse_ATA_lambdaI.dot(AT_b)
+    inverse_ATA_lambdaI = np.matmul(inverse_U, inverse_L, dtype=np.float64)
+    result_lse = np.matmul(inverse_ATA_lambdaI, AT_b, dtype=np.float64)
     show_result(A, result_lse, b, x, 'LSE')
-    # print(result_lse)
     print('\n', end='')
 
     '''
     steepest descent method
-    1. Use steepest descent with LSE and L1 norm to find the best fitting line. 
+    1. Use steepest descent with LSE and L1 norm to find the best fitting line.
     2. Print out the equation of the best fitting line and the error.
     '''
     # Construct the design matrix
     EPOCHS = 10000
     coefficients = np.zeros((N,1))  # Initialize coefficients
-
     # Performing Gradient Descent 
     coefficients = gradient_descent(A, b, coefficients, LEARNING_RATE, EPOCHS, LAMBDA, N)
-    print(coefficients)
     show_result(A, coefficients, b, x, 'Descent')
 
     ''' 
@@ -235,7 +234,6 @@ if __name__ == '__main__':
     result = np.full((N, 1), 100)
     AT_A_x = np.matmul(gram_matrix,result)
     gradient = 2 * (AT_A_x - AT_b)
-    print(np.shape(gradient))
     hessian = 2 * (np.matmul(A.T, A))
 
     L, U = LUdecompose(hessian)
@@ -245,5 +243,4 @@ if __name__ == '__main__':
     # print(inverse_hessian)
     update = np.matmul(inverse_hessian, gradient)
     result = result - update
-    print(result)
     show_result(A, result, b, x, 'Newton\'s')
