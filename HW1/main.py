@@ -3,8 +3,17 @@ import csv
 import argparse
 import matplotlib.pyplot as plt
 import numpy as np
+np.set_printoptions(precision = 3, suppress=True) #set array format
+
+''' 
+python main.py --INPUT_FILE=testfile.txt --N=3 --LAMBDA=10000 --LR 0.0001
+''' 
 
 def Power(base, exp):
+    '''
+    Power Function
+    return base^exp
+    '''
     result = 1
     while exp:
         if exp & 1:
@@ -14,6 +23,11 @@ def Power(base, exp):
     return result
 
 def LUdecompose(matrix):
+    '''
+    matrix = L * U
+    
+    '''
+    # original setting
     n = len(matrix)
     L = np.zeros((n, n))
     U = np.zeros((n, n))
@@ -22,6 +36,7 @@ def LUdecompose(matrix):
         L[i][i] = 1  # Diagonal of L matrix is 1
 
         for j in range(i, n):
+            #right of the diagonal
             U[i][j] = matrix[i][j]
             for k in range(i):
                 U[i][j] -= L[i][k] * U[k][j]
@@ -30,29 +45,35 @@ def LUdecompose(matrix):
             L[j][i] = matrix[j][i]
             for k in range(i):
                 L[j][i] -= L[j][k] * U[k][i]
-            L[j][i] /= U[i][i]
+            L[j][i] /= U[i][i] #normalize
 
     return L, U
 
 
 def plot(model_name, x, y, b):
+    '''
+    Visualize the result
+    x: x points
+    y: real value
+    b: predict value
+    '''
     fig = plt.figure()
     plt.title(model_name)
-    plt.plot(x, y, 'ro')
-    plt.plot(x, b, '-k')
+    plt.plot(x, y, 'ro') #use red circle points to represent real points
+    plt.plot(x, b, '-k') #use black line to represent the fitting line
     plt.show()
-    fig.savefig(model_name + '_chan.png')
+    fig.savefig(model_name + '.png')
 
 def show_result(A, x, y, x1, model_name):
-    ''' 
+    '''
+    print the result
     A: data, x: parameter, b: target
     b = Ax
     '''
     b = np.matmul(A,x)
-    print(np.shape(b))
     print(model_name + ': ')
-    
     print('Fitting line : ', end='')
+
     for row in range(np.shape(x)[0]):
         if row != np.shape(x)[0] - 1:
             if row != 0:
@@ -65,7 +86,7 @@ def show_result(A, x, y, x1, model_name):
                     print(str(x[row][0]) + ' X^' + str((np.shape(x)[0]-1) - row), end=' ')
                 else:
                     print('- ' + str((-1) * x[row][0]) + ' X^' + str((np.shape(x)[0]-1) - row), end=' ')
-        else:
+        else: #last
             if x[row] >= 0:
                 print('+ ' + str(x[row][0]))
             else:
@@ -80,11 +101,12 @@ def show_result(A, x, y, x1, model_name):
     plot(model_name, x1, y, b)
 
 def gradient_descent(X, y, coeffs, learning_rate, epochs, Lambda, N):
-    n = N
-    Lambdas = np.array([Lambda] * N)
-    # print(np.shape(Lambdas))
+    '''
+    Update the coefficients
+    '''
     for _ in range(epochs):
-        y_pred = np.dot( X, coeffs)  # The current predicted value of Y
+        #Compute the current predicted value of y
+        y_pred = np.dot( X, coeffs)
         # Compute the gradient of the loss with respect to coefficients
         gradient = (-2 / np.shape(X)[0]) * np.dot(X.T, (y - y_pred))
         # Add L1 regularization term to the gradients

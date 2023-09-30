@@ -3,7 +3,7 @@ import csv
 import argparse
 import matplotlib.pyplot as plt
 import numpy as np
-np.set_printoptions(precision = 3, suppress=True)
+np.set_printoptions(precision = 3, suppress=True) #set array format
 
 ''' 
 python hw1.py --INPUT_FILE=testfile.txt --N=3 --LAMBDA=10000
