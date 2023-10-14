@@ -16,8 +16,6 @@ def Online_learning(count):
     Binomial_MLE = m / N
     return (math.factorial(N)/ (math.factorial(m) * math.factorial(N - m))) * (Binomial_MLE ** m) * ((1 - Binomial_MLE)**(N-m))
 
-    
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--INPUT_FILE', type = str, default = 'testfile.txt')
