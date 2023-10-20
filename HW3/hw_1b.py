@@ -1,7 +1,6 @@
 import numpy as np
 import argparse
 import hw_1a
-import sys
 
 def Power(base, exp):
     '''
