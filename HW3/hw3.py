@@ -1,18 +1,8 @@
 import numpy as np
 import argparse
-import hw_1a
-import seaborn as sns
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
-
-def point_generator(a, w):
-    error = hw_1a.gaussian_data_generator(0, a)
-    x = np.random.uniform(-1, 1)
-    y = error
-    for i in range(n):
-        y += w[i]*Power(x, i)
-    return x, y
-
+import hw_1b
 
 def Power(base, exp):
     '''
@@ -48,7 +38,7 @@ if __name__ == '__main__':
 
     while True:
         k += 1
-        x, y = point_generator(a_for_point, w)
+        x, y = hw_1b.point_generator(a_for_point, w, n)
         data_x.append(x)
         data_y.append(y)
         #design matirx = A

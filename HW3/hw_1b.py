@@ -15,6 +15,18 @@ def Power(base, exp):
         base *= base
     return result
 
+def point_generator(a, w, n):
+    '''
+    Polynomial basis linear model data generator.
+    Return a (x, y) point from y = WX + e
+    '''
+    error = hw_1a.gaussian_data_generator(0, a)
+    x = np.random.uniform(-1, 1)
+    y = error
+    for i in range(n):
+        y += w[i]*Power(x, i)
+    return x, y
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--N', type = int, default = 0)
@@ -26,9 +38,5 @@ if __name__ == '__main__':
     w = []
     for k in args.W.split('/'):
         w.append(float(k))
-    error = hw_1a.gaussian_data_generator(0, a)
-    x = np.random.uniform(-1, 1)
-    y = error
-    for i in range(n):
-        y += w[i]*Power(x, i)
+    x, y = point_generator(a, w, n)
     print(f'The point: ({x}, {y})')
